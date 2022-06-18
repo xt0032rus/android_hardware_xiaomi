@@ -107,6 +107,7 @@ BiometricsFingerprint::~BiometricsFingerprint() {
 }
 
 Return<RequestStatus> BiometricsFingerprint::ErrorFilter(int32_t error) {
+    ALOGI("%s", __func__);
     switch (error) {
         case 0:
             return RequestStatus::SYS_OK;
@@ -141,6 +142,7 @@ Return<RequestStatus> BiometricsFingerprint::ErrorFilter(int32_t error) {
 // Translate from errors returned by traditional HAL (see fingerprint.h) to
 // HIDL-compliant FingerprintError.
 FingerprintError BiometricsFingerprint::VendorErrorFilter(int32_t error, int32_t* vendorCode) {
+    ALOGI("%s", __func__);
     *vendorCode = 0;
     switch (error) {
         case FINGERPRINT_ERROR_HW_UNAVAILABLE:
@@ -172,6 +174,7 @@ FingerprintError BiometricsFingerprint::VendorErrorFilter(int32_t error, int32_t
 // to HIDL-compliant FingerprintAcquiredInfo.
 FingerprintAcquiredInfo BiometricsFingerprint::VendorAcquiredFilter(int32_t info,
                                                                     int32_t* vendorCode) {
+    ALOGI("%s", __func__);
     *vendorCode = 0;
     switch (info) {
         case FINGERPRINT_ACQUIRED_GOOD:
@@ -199,6 +202,7 @@ FingerprintAcquiredInfo BiometricsFingerprint::VendorAcquiredFilter(int32_t info
 
 Return<uint64_t> BiometricsFingerprint::setNotify(
         const sp<IBiometricsFingerprintClientCallback>& clientCallback) {
+    ALOGI("%s", __func__);
     std::lock_guard<std::mutex> lock(mClientCallbackMutex);
     mClientCallback = clientCallback;
     // This is here because HAL 2.1 doesn't have a way to propagate a
@@ -209,24 +213,29 @@ Return<uint64_t> BiometricsFingerprint::setNotify(
 }
 
 Return<uint64_t> BiometricsFingerprint::preEnroll() {
+    ALOGI("%s", __func__);
     return mDevice->pre_enroll(mDevice);
 }
 
 Return<RequestStatus> BiometricsFingerprint::enroll(const hidl_array<uint8_t, 69>& hat,
                                                     uint32_t gid, uint32_t timeoutSec) {
+    ALOGI("%s", __func__);
     const hw_auth_token_t* authToken = reinterpret_cast<const hw_auth_token_t*>(hat.data());
     return ErrorFilter(mDevice->enroll(mDevice, authToken, gid, timeoutSec));
 }
 
 Return<RequestStatus> BiometricsFingerprint::postEnroll() {
+    ALOGI("%s", __func__);
     return ErrorFilter(mDevice->post_enroll(mDevice));
 }
 
 Return<uint64_t> BiometricsFingerprint::getAuthenticatorId() {
+    ALOGI("%s", __func__);
     return mDevice->get_authenticator_id(mDevice);
 }
 
 Return<RequestStatus> BiometricsFingerprint::cancel() {
+    ALOGI("%s", __func__);
     if (mUdfpsHandler) {
         mUdfpsHandler->cancel();
     }
@@ -234,15 +243,18 @@ Return<RequestStatus> BiometricsFingerprint::cancel() {
 }
 
 Return<RequestStatus> BiometricsFingerprint::enumerate() {
+    ALOGI("%s", __func__);
     return ErrorFilter(mDevice->enumerate(mDevice));
 }
 
 Return<RequestStatus> BiometricsFingerprint::remove(uint32_t gid, uint32_t fid) {
+    ALOGI("%s", __func__);
     return ErrorFilter(mDevice->remove(mDevice, gid, fid));
 }
 
 Return<RequestStatus> BiometricsFingerprint::setActiveGroup(uint32_t gid,
                                                             const hidl_string& storePath) {
+    ALOGI("%s", __func__);
     if (storePath.size() >= PATH_MAX || storePath.size() <= 0) {
         ALOGE("Bad path length: %zd", storePath.size());
         return RequestStatus::SYS_EINVAL;
@@ -261,6 +273,7 @@ Return<RequestStatus> BiometricsFingerprint::setActiveGroup(uint32_t gid,
 }
 
 Return<RequestStatus> BiometricsFingerprint::authenticate(uint64_t operationId, uint32_t gid) {
+    ALOGI("%s", __func__);
     return ErrorFilter(mDevice->authenticate(mDevice, operationId, gid));
 }
 
