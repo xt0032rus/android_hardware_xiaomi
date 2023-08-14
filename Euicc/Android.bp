@@ -5,7 +5,7 @@
 //
 
 android_app {
-    name: "OplusEuicc",
+    name: "XiaomiEuicc",
 
     srcs: ["src/**/*.kt"],
     resource_dirs: ["res"],

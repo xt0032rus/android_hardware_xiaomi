@@ -16,6 +16,6 @@ class EuiccReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        private const val TAG = "OplusEuiccReceiver"
+        private const val TAG = "XiaomiEuiccReceiver"
     }
 }

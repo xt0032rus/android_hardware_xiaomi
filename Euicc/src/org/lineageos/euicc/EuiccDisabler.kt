@@ -11,7 +11,7 @@ import android.content.pm.PackageManager.PackageInfoFlags
 import android.util.Log
 
 object EuiccDisabler {
-    private const val TAG = "OplusEuiccDisabler"
+    private const val TAG = "XiaomiEuiccDisabler"
 
     private val EUICC_DEPENDENCIES = listOf(
         "com.google.android.gms",
