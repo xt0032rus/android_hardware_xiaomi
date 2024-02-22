@@ -24,23 +24,30 @@
 
 namespace {
 
-static bool readFpState(int fd) {
-    char c;
+static bool readFpState(int fd, int& screenX, int& screenY) {
+    char buffer[512];
+    int state = 0;
     int rc;
 
     rc = lseek(fd, 0, SEEK_SET);
     if (rc) {
-        ALOGE("failed to seek fd, err: %d", rc);
+        ALOGE("failed to seek: %d", rc);
         return false;
     }
 
-    rc = read(fd, &c, sizeof(char));
-    if (rc != 1) {
-        ALOGE("failed to read bool from fd, err: %d", rc);
+    rc = read(fd, &buffer, sizeof(buffer));
+    if (rc < 0) {
+        ALOGE("failed to read state: %d", rc);
         return false;
     }
 
-    return c != '0';
+    rc = sscanf(buffer, "%d,%d,%d", &screenX, &screenY, &state);
+    if (rc < 0) {
+        ALOGE("failed to parse fp state: %d", rc);
+        return false;
+    }
+
+    return state > 0;
 }
 
 }  // anonymous namespace
@@ -296,7 +303,7 @@ void UdfpsSensor::run() {
                 continue;
             }
 
-            if (mPolls[1].revents == mPolls[1].events && readFpState(mPollFd)) {
+            if (mPolls[1].revents == mPolls[1].events && readFpState(mPollFd, mScreenX, mScreenY)) {
                 mIsEnabled = false;
                 mCallback->postEvents(readEvents(), isWakeUpSensor());
             } else if (mPolls[0].revents == mPolls[0].events) {
