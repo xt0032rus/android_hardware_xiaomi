@@ -10,10 +10,9 @@
 #include <hardware/hw_auth_token.h>
 
 #include <android-base/strings.h>
+#include <hardware/hardware.h>
 #include "BiometricsFingerprint.h"
 #include "UdfpsHandler.h"
-
-#include "xiaomi_fingerprint.h"
 
 #include <android-base/properties.h>
 #include <inttypes.h>
@@ -292,14 +291,7 @@ IBiometricsFingerprint* BiometricsFingerprint::getInstance() {
     return sInstance;
 }
 
-IXiaomiFingerprint* BiometricsFingerprint::getXiaomiInstance() {
-    if (!sInstance) {
-      sInstance = new BiometricsFingerprint();
-    }
-    return sInstance;
-}
-
-xiaomi_fingerprint_device_t* BiometricsFingerprint::openHal(const char *class_name) {
+fingerprint_device_t* BiometricsFingerprint::openHal(const char* class_name) {
     int err;
     const hw_module_t* hw_mdl = nullptr;
     ALOGD("Opening fingerprint hal library...");
@@ -332,8 +324,7 @@ xiaomi_fingerprint_device_t* BiometricsFingerprint::openHal(const char *class_na
         return nullptr;
     }
 
-    xiaomi_fingerprint_device_t* fp_device =
-        reinterpret_cast<xiaomi_fingerprint_device_t*>(device);
+    fingerprint_device_t* fp_device = reinterpret_cast<fingerprint_device_t*>(device);
 
     if (0 != (err = fp_device->set_notify(fp_device, BiometricsFingerprint::notify))) {
         ALOGE("Can't register fingerprint module callback, error: %d", err);
@@ -431,10 +422,6 @@ void BiometricsFingerprint::notify(const fingerprint_msg_t* msg) {
             }
             break;
     }
-}
-
-Return<int32_t> BiometricsFingerprint::extCmd(int32_t cmd, int32_t param) {
-    return mDevice->extCmd(mDevice, cmd, param);
 }
 
 }  // namespace implementation
