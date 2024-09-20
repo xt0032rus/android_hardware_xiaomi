@@ -24,26 +24,31 @@ object EuiccDisabler {
         "com.google.android.ims",
     )
 
-    private fun isInstalledAndEnabled(pm: PackageManager, pkgName: String) = runCatching {
-        val info = pm.getPackageInfo(pkgName, PackageInfoFlags.of(0))
-        Log.d(TAG, "package $pkgName installed, enabled = ${info.applicationInfo.enabled}")
-        info.applicationInfo.enabled
-    }.getOrDefault(false)
+    private fun isInstalledAndEnabled(pm: PackageManager, pkgName: String): Boolean {
+        return runCatching {
+            val info = pm.getPackageInfo(pkgName, PackageInfoFlags.of(0))
+            Log.d(TAG, "package $pkgName installed, enabled = ${info.applicationInfo?.enabled}")
+            info.applicationInfo?.enabled ?: false
+        }.getOrDefault(false)
+    }
 
     fun enableOrDisableEuicc(context: Context) {
         val pm = context.packageManager
         val disable = EUICC_DEPENDENCIES.any { !isInstalledAndEnabled(pm, it) }
+
         val flag = if (disable) {
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED
         } else {
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         }
 
-        try {
-            for (pkg in EUICC_PACKAGES) {
+        for (pkg in EUICC_PACKAGES) {
+            try {
                 pm.setApplicationEnabledSetting(pkg, flag, 0)
+                Log.d(TAG, "Package $pkg set to ${if (disable) "disabled" else "enabled"}")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to change state for package $pkg", e)
             }
-        } catch (e: Exception) {
         }
     }
 }
