@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+namespace {
+
 static bool readBool(int fd, bool seek) {
     char c;
     int rc;
@@ -42,6 +44,8 @@ static bool readBool(int fd, bool seek) {
 
     return c != '0';
 }
+
+}  // anonymous namespace
 
 namespace android {
 namespace hardware {
@@ -214,9 +218,9 @@ OneShotSensor::OneShotSensor(int32_t sensorHandle, ISensorsEventCallback* callba
 }
 
 SysfsPollingOneShotSensor::SysfsPollingOneShotSensor(
-    int32_t sensorHandle, ISensorsEventCallback* callback, const std::string& pollPath,
-    const std::string& enablePath, const std::string& name, const std::string& typeAsString,
-    SensorType type)
+        int32_t sensorHandle, ISensorsEventCallback* callback, const std::string& pollPath,
+        const std::string& enablePath, const std::string& name, const std::string& typeAsString,
+        SensorType type)
     : OneShotSensor(sensorHandle, callback) {
     mSensorInfo.name = name;
     mSensorInfo.type = type;
@@ -226,9 +230,7 @@ SysfsPollingOneShotSensor::SysfsPollingOneShotSensor(
     mSensorInfo.power = 0;
     mSensorInfo.flags |= SensorFlagBits::WAKE_UP;
 
-    if (enablePath != "") {
-        mEnableStream.open(enablePath);
-    }
+    mEnableStream.open(enablePath);
 
     int rc;
 
@@ -250,20 +252,15 @@ SysfsPollingOneShotSensor::SysfsPollingOneShotSensor(
     }
 
     mPolls[0] = {
-        .fd = mWaitPipeFd[0],
-        .events = POLLIN,
+            .fd = mWaitPipeFd[0],
+            .events = POLLIN,
     };
 
     mPolls[1] = {
-        .fd = mPollFd,
-        .events = POLLERR | POLLPRI,
+            .fd = mPollFd,
+            .events = POLLERR | POLLPRI,
     };
 }
-
-SysfsPollingOneShotSensor::SysfsPollingOneShotSensor(
-        int32_t sensorHandle, ISensorsEventCallback* callback, const std::string& pollPath,
-        const std::string& name, const std::string& typeAsString, SensorType type)
-    : SysfsPollingOneShotSensor(sensorHandle, callback, pollPath, "", name, typeAsString, type) {}
 
 SysfsPollingOneShotSensor::~SysfsPollingOneShotSensor() {
     interruptPoll();
@@ -283,7 +280,6 @@ void SysfsPollingOneShotSensor::activate(bool enable, bool notify, bool lock) {
     }
 
     if (mIsEnabled != enable) {
-
         writeEnable(enable);
 
         mIsEnabled = enable;
@@ -359,22 +355,6 @@ std::vector<Event> SysfsPollingOneShotSensor::readEvents() {
 void SysfsPollingOneShotSensor::fillEventData(Event& event) {
     event.u.data[0] = 0;
     event.u.data[1] = 0;
-}
-
-bool IsPathValid(const std::string& path) {
-  std::ifstream file(path);
-  return file.good();
-}
-
-std::string GetPollPath(const char** array) {
-  for (; *array != NULL; ++array) {
-    const char* path = *array;
-
-    if (IsPathValid(path))
-      return path;
-  }
-
-  return "";
 }
 
 }  // namespace implementation
