@@ -1,0 +1,31 @@
+/*
+ * Copyright (C) 2023 The LineageOS Project
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package com.fingerprints.extension@1.0;
+
+import IFingerprintOpticalCallback;
+
+interface IFingerprintOptical {
+    oneway setNotify(IFingerprintOpticalCallback callback);
+
+    oneway setIlluminationStatus(uint32_t value);
+
+    oneway etFingerListenerStatus(uint32_t value);
+
+    setExposure(uint16_t exposureTime) generates (bool result);
+
+    getExposure() generates (int16_t retVal);
+
+    setAnalogGain(uint16_t gain) generates (bool result);
+
+    getAnalogGain() generates (int16_t retVal);
+
+    oneway setHotZoneData(HotZoneData hotZoneData);
+
+    oneway setTouchEventData(TouchEventData touchEventData);
+
+    getToutchEventData() generates (TouchEventData touchEventData);
+};

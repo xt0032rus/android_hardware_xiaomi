@@ -1,0 +1,15 @@
+//
+// Copyright (C) 2024 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+java_library {
+    name: "xiaomi-telephony-stub",
+    installable: true,
+    provides_uses_lib: "xiaomi-telephony-stub",
+    sdk_version: "system_current",
+    srcs: [
+        "src/**/*.java",
+    ],
+}

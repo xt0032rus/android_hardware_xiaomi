@@ -1,0 +1,19 @@
+/*
+ * Copyright (C) 2023 The LineageOS Project
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package com.fingerprints.extension@1.0;
+
+interface ISensorTestCallback {
+    oneway onResult(SensorTestResult result);
+
+    onResultInit(uint32_t resultCode, uint32_t errorCode, bool imageFetched) generates (int32_t result);
+
+    onResultTransfer(uint8_t type, string input) generates (int32_t result);
+
+    onResultTransferImg(vec<uint8_t> input) generates (int32_t result);
+
+    oneway onResultFinish();
+};
