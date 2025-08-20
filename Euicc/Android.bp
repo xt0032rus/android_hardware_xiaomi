@@ -1,0 +1,72 @@
+//
+// Copyright (C) 2023 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+android_app {
+    name: "XiaomiEuicc",
+    srcs: ["src/**/*.kt"],
+    sdk_version: "current",
+    product_specific: true,
+    certificate: "platform",
+    privileged: true,
+
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
+    required: [
+        "co.aospa.euicc.xml",
+        "hidden-api-whitelist-co.aospa.euicc.xml",
+        "EuiccGoogle",
+    ],
+}
+
+android_app_import {
+    name: "EuiccGoogle",
+    owner: "xiaomi",
+    apk: "proprietary/product/priv-app/EuiccGoogle/EuiccGoogle.apk",
+    preprocessed: true,
+    presigned: true,
+    dex_preopt: {
+        enabled: false,
+    },
+    privileged: true,
+    product_specific: true,
+    required: [
+        "default-permissions-euicc.xml",
+        "privapp-permissions-euiccgoogle.xml",
+    ],
+}
+
+prebuilt_etc {
+    name: "default-permissions-euicc.xml",
+    relative_install_path: "default-permissions",
+    filename: "default-permissions-euicc.xml",
+    src: "default-permissions-euicc.xml",
+    product_specific: true,
+}
+
+prebuilt_etc {
+    name: "privapp-permissions-euiccgoogle.xml",
+    relative_install_path: "permissions",
+    filename: "privapp-permissions-euiccgoogle.xml",
+    src: "privapp-permissions-euiccgoogle.xml",
+    product_specific: true,
+}
+
+prebuilt_etc {
+    name: "co.aospa.euicc.xml",
+    relative_install_path: "permissions",
+    filename: "co.aospa.euicc.xml",
+    src: "co.aospa.euicc.xml",
+    product_specific: true,
+}
+
+prebuilt_etc {
+    name: "hidden-api-whitelist-co.aospa.euicc.xml",
+    relative_install_path: "sysconfig",
+    filename: "hidden-api-whitelist-co.aospa.euicc.xml",
+    src: "hidden-api-whitelist-co.aospa.euicc.xml",
+    product_specific: true,
+}
