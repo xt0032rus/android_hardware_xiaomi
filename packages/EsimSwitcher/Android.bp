@@ -14,7 +14,9 @@ android_app {
     system_ext_specific: true,
     static_libs: [
         "androidx.core_core",
+        "androidx.lifecycle_lifecycle-runtime-ktx",
         "androidx.preference_preference",
+        "kotlinx_coroutines_android",
         "org.lineageos.settings.resources",
         "SettingsLib",
     ],

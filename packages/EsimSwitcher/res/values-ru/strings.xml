@@ -11,4 +11,6 @@
     <string name="esim_warning_title">eSIM используется</string>
     <string name="esim_warning_message">Прежде чем продолжить, отключите или удалите текущий профиль eSIM</string>
     <string name="esim_footer_note">Включение eSIM приведет к отключению физического слота для второй  SIM-карты</string>
+    <string name="esim_status_unavailable">Не удалось получить состояние eSIM от модема.</string>
+    <string name="esim_switch_failed">Модем не смог переключить тип SIM-карты.</string>
 </resources>

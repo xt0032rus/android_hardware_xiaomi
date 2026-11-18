@@ -35,7 +35,9 @@ class BootCompletedReceiver : BroadcastReceiver() {
                 hasNonRemovableEuicc,
             )
 
-            if (hasNonRemovableEuicc) {
+            if (hasNonRemovableEuicc &&
+                !context.resources.getBoolean(R.bool.config_use_radio_config)
+            ) {
                 EsimController.getInstance(context).onBootCompleted()
             }
         }

@@ -14,4 +14,6 @@
     <string name="esim_warning_title">eSIM in use</string>
     <string name="esim_warning_message">Please disable or remove your current eSIM profile before proceeding</string>
     <string name="esim_footer_note">Enabling eSIM will disable the second physical SIM slot</string>
+    <string name="esim_status_unavailable">The modem could not report the eSIM state.</string>
+    <string name="esim_switch_failed">The modem could not change the SIM type.</string>
 </resources>

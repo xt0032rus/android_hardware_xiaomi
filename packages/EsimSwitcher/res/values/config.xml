@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="config_use_radio_config">false</bool>
+    <overlayable name="EsimSwitcherConfig">
+        <policy type="odm">
+            <item type="bool" name="config_use_radio_config" />
+        </policy>
+    </overlayable>
+</resources>
